@@ -1,5 +1,5 @@
 from flask import Flask, flash
-from flask import render_template
+from flask import render_template, url_for
 import numpy as np
 import librosa
 import pandas as pd
@@ -8,8 +8,8 @@ from sklearn.preprocessing import LabelEncoder
 from tensorflow import keras
 
 
-app = Flask(__name__, template_folder='templates')
-
+app = Flask(__name__, template_folder='templates', static_folder='static')
+app.run(debug=True)
 app.config.update(
     TESTING=True,
     SECRET_KEY='192b9bdd22ab9ed4d12e236c78afcb9a393ec15f71bbf5dc987d54727823bcbf'
@@ -18,13 +18,10 @@ app.config.update(
 
 @app.route('/', methods=['GET', 'POST'])
 def homepage():
-    name = "Mustafa"
-    flash('Hata!!')
-    flash('hata2!!')
-    return render_template('index.html', name=name)
+    return render_template('index.html')
 
 
-@app.route('/showModelResult', method=['GET', 'POST'])
+@app.route('/za', methods=['GET', 'POST'])
 def model():
     extracted_features_df = pd.read_csv('soundFeature.csv')
     X = np.array(extracted_features_df['feature'].tolist())
